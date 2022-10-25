@@ -12,6 +12,73 @@ const cartas = [
 
 const baralho = [];
 
+let primeiraCarta, segundaCarta;
+
+let jogadas = 0;
+let acertos = 0;
+
+function resetCartas(){
+    primeiraCarta = undefined;
+    segundaCarta = undefined;
+}
+
+function desvirarCartas(){
+    primeiraCarta.classList.remove('virada');
+    segundaCarta.classList.remove('virada');
+
+     // resetar as cartas
+     resetCartas();
+}
+
+function finalizarJogo(){
+    if (acertos === baralho.length){
+        alert(`Jogo Finalizado com ${jogadas} jogas`);
+    }
+}
+
+function virarCarta(carta){
+    
+    if ( carta.classList.contains('virada')){
+        return;
+    }
+
+    if ( primeiraCarta !== undefined && segundaCarta !== undefined ){
+        return;
+    }
+
+    if ( primeiraCarta === undefined || segundaCarta === undefined){
+
+        carta.classList.add('virada');
+        jogadas++;
+
+        if ( primeiraCarta === undefined ){
+            primeiraCarta = carta;
+        }else{
+            if ( segundaCarta === undefined){
+                segundaCarta = carta;
+
+                // comparar as duas cartas
+                if ( primeiraCarta.innerHTML === segundaCarta.innerHTML){
+                    console.log('CARTAS SAO IGUAIS');
+                    resetCartas();
+                    acertos += 2;
+
+                    finalizarJogo();
+                }else{
+                    // desvirarCartas
+                    console.log('CARTAS SAO DIFERENTES');
+
+                    setTimeout(desvirarCartas, 1000);                  
+
+                }
+            }
+        }
+        console.log(primeiraCarta);
+        console.log(segundaCarta);
+
+    }
+
+}
 
 function renderizarBaralho(){
 
@@ -19,7 +86,7 @@ function renderizarBaralho(){
 
     for(let i = 0; i < baralho.length; i++){
         let cartaTemplate = `
-            <li class="carta">
+            <li class="carta" onclick="virarCarta(this)">
                 <div class='front-face face'>
                     <img src='imagens/front.png'>
                 </div>
